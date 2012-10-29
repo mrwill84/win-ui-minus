@@ -45,15 +45,9 @@ namespace Gui
 
 		virtual HWND getHandle() const { return _hWnd; }
 
-        virtual Point getPosition(void) const
-        {
-            return _position;
-        }
+        virtual Point getPosition(void) const { return _position; }
 
-		virtual Dimension getSize(void) const
-		{
-			return _size;
-		}
+		virtual Dimension getSize(void) const { return _size; }
 
 		virtual void setPosition(const Point & point, const Dimension & size = Dimension())
 		{
@@ -108,11 +102,6 @@ namespace Gui
 				return false;
 			}
 			return true;
-		}
-
-		virtual void setSize(const Dimension & size)
-		{
-            setPosition(_position, size);
 		}
 
         virtual void setDefaultSize(const Dimension & dimension){_defaultSize = dimension;}
@@ -324,6 +313,9 @@ namespace Gui
             }
             else
             {
+				if(_defaultSize.width != 0) {_size.width = _defaultSize.width;}
+				if(_defaultSize.height != 0) {_size.height = _defaultSize.height;}
+
 			    (!_style)  ?_style   = style  :_style;
 			    (!_exStyle)?_exStyle = exStyle:_exStyle;
                 _hWnd = ::CreateWindowEx(_exStyle, 
@@ -355,7 +347,12 @@ namespace Gui
             }
 		}
     
-        void redrawChangedParts(const RECT & oldRect, const RECT & newRect)
+		virtual void setSize(const Dimension & size)
+		{
+            setPosition(_position, size);
+		}
+
+		void redrawChangedParts(const RECT & oldRect, const RECT & newRect)
         {
             RECT updateRect = newRect;
 

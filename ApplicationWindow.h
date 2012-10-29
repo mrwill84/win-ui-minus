@@ -52,7 +52,8 @@ namespace Gui
 
 	public:
 		ApplicationWindow(const std::wstring & className)
-			:_contextPane(0),
+			:ControlBase(),
+			 _contextPane(0),
 			 _statusBar(0),
 			 _toolBar(0),
 			 _className(className), 
@@ -70,10 +71,16 @@ namespace Gui
 	    
 		void create(const HWND parentWindow = HWND_DESKTOP)
 		{
+			centerOnScreen();
+
 			createBase(_className, 
 				       parentWindow, 
 					   WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
 					   _title);
+			
+			if(_statusBar   && (_statusBar  ->getHandle() == 0)) { _statusBar  ->create(_hWnd);} 
+			if(_toolBar     && (_toolBar    ->getHandle() == 0)) { _toolBar    ->create(_hWnd);} 
+			if(_contextPane && (_contextPane->getHandle() == 0)) { _contextPane->create(_hWnd);} 
 		}
 
 		void setTitle(const std::wstring & title)
@@ -89,19 +96,19 @@ namespace Gui
 		void setStatusBar(IView * statusBar)
 		{
 			_statusBar = statusBar;
-			_statusBar->create(_hWnd);
+			if(_hWnd) {_statusBar->create(_hWnd);}
 		}
 
 		void setToolBar(IView * toolBar)
 		{
 			_toolBar = toolBar;
-			_toolBar->create(_hWnd);
+			if(_hWnd) {_toolBar->create(_hWnd);}
 		}
 
 		void setContextPane(IView * contextPane)
 		{
 			_contextPane = contextPane;
-			_contextPane->create(_hWnd);
+			if(_hWnd) { _contextPane->create(_hWnd);}
 		}
 		
         void setIconSmall(HICON hIcon)
@@ -116,6 +123,11 @@ namespace Gui
 
 		int start()
 		{
+			if(_hWnd == 0)
+			{
+				create();
+			}
+
 			::ShowWindow (_hWnd, SW_SHOW);
 			::UpdateWindow(_hWnd);
 
@@ -139,9 +151,12 @@ namespace Gui
 
 		virtual void setSize(const Dimension & size)
 		{
+			//ControlBase::setSize(size);
+
 			size_t width  = size.width;
 			size_t height = size.height;
-			int posY = 0;
+			int posY = 0;			
+
 			if(_statusBar)
 			{
 				RECT rect = _statusBar->getWindowRect();
@@ -165,8 +180,17 @@ namespace Gui
 
 		void centerOnScreen(void)
 		{
-			if(_size.height != 0 && _size.width != 0)
+			size_t screenWidth  = ::GetSystemMetrics(SM_CXSCREEN);
+			size_t screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
+			if(_defaultSize.height != 0 && _defaultSize.width != 0)
 			{
+				_position.x = (screenWidth /2) - (_defaultSize.width /2);
+				_position.y = (screenHeight/2) - (_defaultSize.height/2);
+			}
+			if(_size.height != CW_USEDEFAULT && _size.width != CW_USEDEFAULT)
+			{
+				_position.x = (screenWidth /2) - (_size.width /2);
+				_position.y = (screenHeight/2) - (_size.height/2);
 			}
 		}
 	};
