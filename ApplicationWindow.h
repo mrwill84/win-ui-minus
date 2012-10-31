@@ -75,8 +75,13 @@ namespace Gui
 
 			createBase(_className, 
 				       parentWindow, 
-					   WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+					   _style,
 					   _title);
+
+			RECT rcClient = getClientRect();
+
+			Dimension clientSize(rcClient.right, rcClient.bottom);
+			setSize(clientSize);
 			
 			if(_statusBar   && (_statusBar  ->getHandle() == 0)) { _statusBar  ->create(_hWnd);} 
 			if(_toolBar     && (_toolBar    ->getHandle() == 0)) { _toolBar    ->create(_hWnd);} 
@@ -151,8 +156,6 @@ namespace Gui
 
 		virtual void setSize(const Dimension & size)
 		{
-			//ControlBase::setSize(size);
-
 			size_t width  = size.width;
 			size_t height = size.height;
 			int posY = 0;			

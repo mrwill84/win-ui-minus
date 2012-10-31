@@ -39,6 +39,7 @@ namespace Gui
 		WNDPROC         _oldProc;
 		std::wstring    _text;
 		DWORD           _style;
+		Font            _font;
 
     public:
 		virtual ~ControlBase(){}
@@ -266,6 +267,16 @@ namespace Gui
                 ::SetFocus(_hWnd);
             }
         }
+
+		virtual void setFont(const Font & font)
+		{
+			_font = font;
+			if(_hWnd)
+			{
+				::SendMessage(_hWnd, WM_SETFONT, (WPARAM)(HFONT)_font, MAKELPARAM(TRUE, 0));
+			}
+		}
+
 #pragma warning( push )
 #pragma warning( disable : 4312 4311)
 		virtual WNDPROC subclass(const HWND hWnd)
@@ -288,6 +299,8 @@ namespace Gui
 
             return superProc;
 		};
+
+
 #pragma warning( pop )  
 
 	protected:
@@ -296,8 +309,7 @@ namespace Gui
 			 _controller(0), 
 			 _style(0),
              _exStyle(0),
-			 _oldProc(0),
-			 _defaultSize(Dimension(150, 150))
+			 _oldProc(0)
 		{
 		}
 
@@ -305,7 +317,7 @@ namespace Gui
 			            const HWND parentWnd, 
 						DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
 			            const std::wstring & title = L"",
-						DWORD exStyle = 0)
+						DWORD exStyle = 0, HMENU hMenu = 0)
 		{
             if(isWindow())
             {
@@ -327,7 +339,7 @@ namespace Gui
 								        _size.width ?static_cast<int>(_size.width ):CW_USEDEFAULT, 
 								        _size.height?static_cast<int>(_size.height):CW_USEDEFAULT, 
 		                                parentWnd, 
-		                                0, 
+		                                hMenu, 
 								        ::GetModuleHandle(0), 
 		                                this);
                 if(!_hWnd)
@@ -335,7 +347,17 @@ namespace Gui
                     DWORD error = ::GetLastError();
                     throw error;
                 }
-			    SetWindowFont(_hWnd, GetStockFont(DEFAULT_GUI_FONT), FALSE);
+			    
+				if((HFONT)_font)
+				{
+					SetWindowFont(_hWnd, (HFONT)_font, FALSE);
+				}
+				else
+				{
+					SetWindowFont(_hWnd, GetStockFont(DEFAULT_GUI_FONT), FALSE);
+				}
+
+				//::SendMessage(_hWnd, WM_SETFONT, (WPARAM)(HFONT)_font, MAKELPARAM(TRUE, 0));
                 if(_controller)
                 {
 				    _oldProc = subclass(_hWnd);

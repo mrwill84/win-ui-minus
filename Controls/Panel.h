@@ -49,6 +49,7 @@ namespace Gui
 			if(_layout)
 			{
 				_layout->createControls(_hWnd);
+				_layout->setResize(_size.width, _size.height);
 			}
 		}
 		
@@ -80,6 +81,7 @@ namespace Gui
 			{
 				_layout->setResize(_size.width, _size.height);
 			}
+			paint();
         }
 	};
 

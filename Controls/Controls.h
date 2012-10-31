@@ -90,9 +90,13 @@ namespace Gui
         #pragma warning( disable : 4312 4311)
 		virtual void create(const HWND parentWindow)
 		{
-            _hWnd = ::CreateWindow(WC_BUTTON, _text.c_str(), BS_PUSHBUTTON | WS_VISIBLE | WS_CHILD,
-                                   0, 0, 40, 20, parentWindow, reinterpret_cast<HMENU>(_actionId), ::GetModuleHandle(0), 0);
-			SetWindowFont(_hWnd, GetStockFont(DEFAULT_GUI_FONT), FALSE);
+			createBase(
+				WC_BUTTON, 
+				parentWindow, 
+				BS_PUSHBUTTON | WS_VISIBLE | WS_CHILD, 
+				_text.c_str(),
+				0,
+				reinterpret_cast<HMENU>(_actionId));
 		}
         #pragma warning( pop ) 
     };

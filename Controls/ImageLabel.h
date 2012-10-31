@@ -21,7 +21,7 @@ namespace Gui
 
 		virtual void create(const HWND parentWindow)
 		{
-			_hBitmap = (HBITMAP)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(_imageId), IMAGE_BITMAP, 100, 100, LR_DEFAULTCOLOR);
+			_hBitmap = (HBITMAP)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(_imageId), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR);
 			createBase(WC_STATIC, parentWindow, WS_CHILD|WS_VISIBLE|SS_BITMAP);
 			::SendMessage(_hWnd, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)_hBitmap);
 		}

@@ -68,6 +68,8 @@ namespace Gui
 		{
 		}
 
+		Font():_handle(0){}
+
 		virtual ~Font(void)
 		{
 			::DeleteObject(_handle);

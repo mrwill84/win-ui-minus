@@ -274,16 +274,62 @@ namespace Gui
 
 	class AbsoluteLayout : public ILayout
     {
+	private:
+		struct ControlWrapper
+		{
+			IView *   control;
+			Point     point;
+			Dimension dimension;
+
+			ControlWrapper(Gui::IView * control_, Gui::Point & point_, Gui::Dimension & dimension_)
+				:control(control_), point(point_), dimension(dimension_){};
+		};
+
+		std::vector<ControlWrapper> _controls;
 
 	public:
 		virtual void add(IView * view) {};
 
-		virtual void add(IView * view, const Point & point, const Dimension & dimention)
+		virtual void add(IView * view, Point & point, Dimension & dimension)
 		{
+			ControlWrapper wrapper(view, point, dimension);
+			_controls.push_back(wrapper);
 		}
 
-		virtual void setResize     (const size_t width, const size_t height) {};
-		virtual void createControls(const HWND parentWindow                ) {};
-		virtual void clean         (void                                   ) {};
+		virtual void setResize(const size_t width, const size_t height) 
+		{
+			for(size_t index = 0; index < _controls.size(); ++index)
+			{
+				IView * control = _controls.at(index).control;
+				Point point = _controls.at(index).point;
+				Dimension dimension = _controls.at(index).dimension;
+
+				if(point.x < 0)
+				{
+					point.x = width - dimension.width + point.x;
+				}
+				if(point.y < 0)
+				{
+					point.y = height - dimension.height + point.y;
+				}
+
+				control->setPosition(point, dimension);
+			}
+		};
+
+		virtual void createControls(const HWND parentWindow) 
+		{
+			for(size_t index = 0; index < _controls.size(); ++index)
+			{
+				_controls.at(index).control->create(parentWindow);
+			}
+		};
+		virtual void clean(void) 
+		{
+			for(size_t index = 0; index < _controls.size(); ++index)
+			{
+				_controls.at(index).control->destroy();
+			}		
+		};
 	};
 };
