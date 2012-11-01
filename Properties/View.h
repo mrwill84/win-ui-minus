@@ -28,7 +28,7 @@
 #include "DefaultModel.h"
 #include "../ControlBase.h"
 #include "../ListPane.h"
-#include "../Controls.h"
+#include "../Controls/Controls.h"
 
 namespace Gui { namespace Properties 
 {

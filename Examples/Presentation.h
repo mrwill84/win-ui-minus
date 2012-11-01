@@ -6,7 +6,7 @@
 #include "../ApplicationWindow.h"
 #include "../SplitPaneView.h"
 #include "../DockContainer/View.h"
-#include "../Controls.h"
+#include "../Controls/Controls.h"
 #include "../ScrollPane.h"
 #include "../Graph/View.h"
 #include "../ListPane.h"
