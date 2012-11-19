@@ -1,28 +1,10 @@
 /*
- * Copyright (c) 2006-2007, Andry Korolyuk
+ * Copyright (c) 2006-2012, Coderminus.com
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions are met:
- *
- *   * Redistributions of source code must retain the above copyright notice, 
- *     this list of conditions and the following disclaimer.
- *   * Neither the name of the Andry Korolyuk nor the names of its contributors 
- *     may be used to endorse or promote products derived from this software 
- *     without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
- * THE POSSIBILITY OF SUCH DAMAGE.
+ * License: http://en.wikipedia.org/wiki/MIT_License
  */
+
 #pragma once
 
 #include <vector>
@@ -59,19 +41,19 @@ public:
 		Gui::registerClass(L"Gui::SplitPaneView");
 	}
 
-	virtual void create(const HWND parentWnd)
+	virtual void create(IView * parentView)
 	{
-		ControlBase::createBase(L"Gui::SplitPaneView", parentWnd);
+		ControlBase::createBase(L"Gui::SplitPaneView", parentView);
 
 		for(size_t index = 0; index < _views.size(); ++index)
 		{
 			if(_views[index]->getHandle() == 0)
 			{
-				_views[index]->create(_hWnd);
+				_views[index]->create(this);
 			}
 			else
 			{
-				::SetParent(_views[index]->getHandle(), parentWnd);
+				::SetParent(_views[index]->getHandle(), parentView->getHandle());
 			}
 		}
 		syncWithModel();
@@ -131,7 +113,7 @@ protected:
 				{
 					Splitbar::View * splitbar = new Splitbar::View(splitter.type == Splitter::VERTICAL);
 					splitbar->setEventHandler(this);
-					splitbar->create(_hWnd);
+					splitbar->create(this);
 					_splitbars.push_back(splitbar);
 				}
 				_splitbars.at(index)->setPosition(Point(splitter.x, splitter.y), Dimension(splitter.width, splitter.height));

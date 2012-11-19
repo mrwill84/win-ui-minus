@@ -113,19 +113,19 @@ namespace Gui
 			}
 		}
 		
-		virtual void createControls(const HWND parentWindow)
+		virtual void createControls(IView * parentView)
 		{
 			if(_centerView)
 			{
-				_centerView->create(parentWindow);
+				_centerView->create(parentView);
 			}
 			if(_westView)
 			{
-				_westView->create(parentWindow);
+				_westView->create(parentView);
 			}
 			if(_southView)
 			{
-				_southView->create(parentWindow);
+				_southView->create(parentView);
 			}
 		}
 
@@ -317,11 +317,11 @@ namespace Gui
 			}
 		};
 
-		virtual void createControls(const HWND parentWindow) 
+		virtual void createControls(IView * parentView) 
 		{
 			for(size_t index = 0; index < _controls.size(); ++index)
 			{
-				_controls.at(index).control->create(parentWindow);
+				_controls.at(index).control->create(parentView);
 			}
 		};
 		virtual void clean(void) 

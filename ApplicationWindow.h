@@ -49,6 +49,7 @@ namespace Gui
 		IView           * _statusBar;
 		IView           * _toolBar;
         DefaultController _defaultController;
+		DesktopView       _desktopView;
 
 	public:
 		ApplicationWindow(const std::wstring & className)
@@ -69,12 +70,12 @@ namespace Gui
 			_defaultController.setView(this);
 		}
 	    
-		void create(const HWND parentWindow = HWND_DESKTOP)
+		void create(IView * parentView = 0)
 		{
 			centerOnScreen();
 
 			createBase(_className, 
-				       parentWindow, 
+				       &_desktopView, 
 					   _style,
 					   _title);
 
@@ -83,9 +84,9 @@ namespace Gui
 			Dimension clientSize(rcClient.right, rcClient.bottom);
 			setSize(clientSize);
 			
-			if(_statusBar   && (_statusBar  ->getHandle() == 0)) { _statusBar  ->create(_hWnd);} 
-			if(_toolBar     && (_toolBar    ->getHandle() == 0)) { _toolBar    ->create(_hWnd);} 
-			if(_contextPane && (_contextPane->getHandle() == 0)) { _contextPane->create(_hWnd);} 
+			if(_statusBar   && (_statusBar  ->getHandle() == 0)) { _statusBar  ->create(this);} 
+			if(_toolBar     && (_toolBar    ->getHandle() == 0)) { _toolBar    ->create(this);} 
+			if(_contextPane && (_contextPane->getHandle() == 0)) { _contextPane->create(this);} 
 		}
 
 		void setTitle(const std::wstring & title)
@@ -101,19 +102,19 @@ namespace Gui
 		void setStatusBar(IView * statusBar)
 		{
 			_statusBar = statusBar;
-			if(_hWnd) {_statusBar->create(_hWnd);}
+			if(_hWnd) {_statusBar->create(this);}
 		}
 
 		void setToolBar(IView * toolBar)
 		{
 			_toolBar = toolBar;
-			if(_hWnd) {_toolBar->create(_hWnd);}
+			if(_hWnd) {_toolBar->create(this);}
 		}
 
 		void setContextPane(IView * contextPane)
 		{
 			_contextPane = contextPane;
-			if(_hWnd) { _contextPane->create(_hWnd);}
+			if(_hWnd) { _contextPane->create(this);}
 		}
 		
         void setIconSmall(HICON hIcon)

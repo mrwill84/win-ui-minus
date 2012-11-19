@@ -43,16 +43,16 @@ namespace Gui
 			Gui::registerClass(L"Gui::Panel");
 		}
 
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
-			createBase(L"Gui::Panel", parentWindow);
+			createBase(L"Gui::Panel", parentView);
 			if(_layout)
 			{
-				_layout->createControls(_hWnd);
+				_layout->createControls(this);
 				_layout->setResize(_size.width, _size.height);
 			}
 		}
-		
+
 		virtual void paint()
 		{
 			Graphics graphics(_hWnd);
@@ -83,6 +83,11 @@ namespace Gui
 			}
 			paint();
         }
+
+		Controller<Panel> * getController()
+		{
+			return &_defaultController;
+		}
 	};
 
 };

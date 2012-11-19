@@ -1,28 +1,10 @@
 /*
- * Copyright (c) 2006-2007, Andry Korolyuk
+ * Copyright (c) 2006-2012, Coderminus.com
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions are met:
- *
- *   * Redistributions of source code must retain the above copyright notice, 
- *     this list of conditions and the following disclaimer.
- *   * Neither the name of the Andry Korolyuk nor the names of its contributors 
- *     may be used to endorse or promote products derived from this software 
- *     without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
- * THE POSSIBILITY OF SUCH DAMAGE.
+ * License: http://en.wikipedia.org/wiki/MIT_License
  */
+
 #pragma once
 
 #include "IModel.h"
@@ -59,12 +41,12 @@ public:
 		_pane = view;
 	}
 
-	virtual void create(const HWND parentWnd)
+	virtual void create(IView * parentView)
 	{
-		ControlBase::createBase(L"Gui::DockContainer::CenterPane", parentWnd);
+		ControlBase::createBase(L"Gui::DockContainer::CenterPane", parentView);
 		if(_pane)
 		{
-			_pane->create(_hWnd);
+			_pane->create(this);
 		}
 	}
 
@@ -147,14 +129,14 @@ public:
 		Gui::registerClass(L"Gui::DockContainer::View");
 	}
 
-	virtual void create(const HWND parentWnd)
+	virtual void create(IView * parentView)
 	{
-		ControlBase::createBase(L"Gui::DockContainer::View", parentWnd);
+		ControlBase::createBase(L"Gui::DockContainer::View", parentView);
 		for(size_t index = 0; index < _views.size(); ++index)
 		{
-			_views.at(index)->create(_hWnd);
+			_views.at(index)->create(this);
 		}
-        _transparentWindow.create(_hWnd);
+        _transparentWindow.create(this);
         _transparentWindow.show(false);
 		syncWithModel();
 	}
@@ -282,7 +264,7 @@ protected:
 				{
 					Splitbar::View * splitbar = new Splitbar::View(splitter.type == Splitter::VERTICAL);
 					splitbar->setEventHandler(this);
-					splitbar->create(_hWnd);
+					splitbar->create(this);
 					_splitbars.push_back(splitbar);
 				}
 				_splitbars.at(index)->setPosition(
@@ -347,7 +329,7 @@ protected:
 					IView * view = popupWindow->getChild();
 
 					DockableWindow * dockableView = new DockableWindow();
-					dockableView->create(_hWnd);
+					dockableView->create(this);
 					dockableView->setFrame(view);
 					dockableView->setHandler(this);
 					dockableView->setId(dock.id);
@@ -370,7 +352,7 @@ protected:
 
 					    PopupWindow * popupWindow = new PopupWindow();
 					    popupWindow->setRect(_dragRect);
-					    popupWindow->create(_hWnd);
+					    popupWindow->create(this);
 					    popupWindow->setChild(view);
 					    popupWindow->setHandler(this);
 					    popupWindow->setId(dock.id);

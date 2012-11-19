@@ -41,11 +41,11 @@ namespace Gui
         Tooltip()
             :ControlBase()
         {}
-        virtual void create(const HWND parentWindow)
+        virtual void create(IView * parentView)
         {
             createBase(
                 TOOLTIPS_CLASS, 
-                parentWindow, 
+                parentView, 
                 WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, L"", WS_EX_TOPMOST);
             ::SetWindowPos(_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         }
@@ -88,11 +88,11 @@ namespace Gui
 
         #pragma warning( push )
         #pragma warning( disable : 4312 4311)
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
 			createBase(
 				WC_BUTTON, 
-				parentWindow, 
+				parentView, 
 				BS_PUSHBUTTON | WS_VISIBLE | WS_CHILD, 
 				_text.c_str(),
 				0,
@@ -118,13 +118,14 @@ namespace Gui
             _defaultController.setView(this);
             setText(text);
         }
+
 		Edit(HWND hWnd) 
             :ControlBase()
         { _hWnd = hWnd;}
 
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
-			createBase(WC_EDIT, parentWindow, WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL);
+			createBase(WC_EDIT, parentView, WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL);
 		}
 
 		virtual std::wstring & getText(void)
@@ -155,11 +156,11 @@ namespace Gui
 			ComboBox_AddString(_hWnd, text.c_str());
 		}
 
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
 			createBase(
                 WC_COMBOBOX, 
-                parentWindow, 
+                parentView, 
                 CBS_DROPDOWNLIST | CBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_CHILD | WS_VISIBLE);
 		}
 
@@ -179,9 +180,9 @@ namespace Gui
 	public:
         Label(const std::wstring & text = L""):ControlBase() {setText(text);}
 
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
-			createBase(WC_STATIC, parentWindow, WS_CHILD|WS_VISIBLE|SS_LEFT);
+			createBase(WC_STATIC, parentView, WS_CHILD|WS_VISIBLE|SS_LEFT);
 		}
 	};
 
@@ -237,9 +238,9 @@ namespace Gui
 			loadFromModel();
 		}
 
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
-			createBase(WC_LISTBOX, parentWindow, WS_CHILD | WS_VISIBLE | WS_VSCROLL |LBS_NOTIFY);
+			createBase(WC_LISTBOX, parentView, WS_CHILD | WS_VISIBLE | WS_VSCROLL |LBS_NOTIFY);
 			loadFromModel();
 		}
 
@@ -282,9 +283,9 @@ namespace Gui
     public:
         Statusbar():ControlBase(){}
 
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
-			createBase(STATUSCLASSNAME, parentWindow);
+			createBase(STATUSCLASSNAME, parentView);
 		}
 	};
 
@@ -345,9 +346,9 @@ namespace Gui
                 :ControlBase(), _model(0)
             {}
 
-		    virtual void create(const HWND parentWindow)
+		    virtual void create(IView * parentView)
 		    {
-			    createBase(WC_TREEVIEW, parentWindow);
+			    createBase(WC_TREEVIEW, parentView);
                 if(_model)
                 {
                     loadFromModel();

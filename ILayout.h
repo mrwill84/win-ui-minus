@@ -16,7 +16,7 @@ namespace Gui
     public:
 		virtual void add           (IView * view                           ) = 0;
 		virtual void setResize     (const size_t width, const size_t height) = 0;
-		virtual void createControls(const HWND parentWindow                ) = 0;
+		virtual void createControls(IView * parentView                     ) = 0;
 		virtual void clean         (void                                   ) = 0;
 		virtual ~ILayout() {};
     };

@@ -314,14 +314,14 @@ namespace Gui
 		}
 
 		void createBase(const std::wstring & className, 
-			            const HWND parentWnd, 
+			            IView * parentView, 
 						DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
 			            const std::wstring & title = L"",
 						DWORD exStyle = 0, HMENU hMenu = 0)
 		{
             if(isWindow())
             {
-                ::SetParent(_hWnd, parentWnd);
+                ::SetParent(_hWnd, parentView->getHandle());
             }
             else
             {
@@ -338,7 +338,7 @@ namespace Gui
 								        _position.y ?_position.y :CW_USEDEFAULT, 
 								        _size.width ?static_cast<int>(_size.width ):CW_USEDEFAULT, 
 								        _size.height?static_cast<int>(_size.height):CW_USEDEFAULT, 
-		                                parentWnd, 
+		                                parentView->getHandle(), 
 		                                hMenu, 
 								        ::GetModuleHandle(0), 
 		                                this);

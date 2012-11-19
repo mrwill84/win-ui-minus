@@ -52,11 +52,11 @@ public:
         Gui::registerClass(L"Gui::TransparentWindow");
     }
 
-    virtual void create(const HWND parentWnd)
+    virtual void create(IView * parentView)
     {
         createBase(
             L"Gui::TransparentWindow", 
-            parentWnd, 
+            parentView, 
             WS_CHILD|WS_VISIBLE|WS_POPUP,
             L"",
             WS_EX_TOOLWINDOW|WS_EX_CONTROLPARENT|WS_EX_LAYERED/*|WS_EX_TOPMOST*/);

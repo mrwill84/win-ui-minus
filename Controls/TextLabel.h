@@ -16,9 +16,9 @@ namespace Gui
 	public:
         TextLabel(const std::wstring & text = L""):ControlBase() {setText(text);}
 
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
-			createBase(WC_STATIC, parentWindow, WS_CHILD|WS_VISIBLE|SS_LEFT);
+			createBase(WC_STATIC, parentView, WS_CHILD|WS_VISIBLE|SS_LEFT);
 		}
 	};
 

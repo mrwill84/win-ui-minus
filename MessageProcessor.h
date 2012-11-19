@@ -217,7 +217,7 @@ namespace Gui
 				{
 					if(_commandListener)
 					{
-						return _commandListener->onCommand(Command(wParam, wParam));
+						return _commandListener->onCommand(Command(wParam, lParam));
 					}
 					break;
 				}

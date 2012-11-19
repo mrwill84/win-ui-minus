@@ -19,10 +19,10 @@ namespace Gui
 	public:
         ImageLabel(const int imageId):ControlBase(), _imageId(imageId) {}
 
-		virtual void create(const HWND parentWindow)
+		virtual void create(IView * parentView)
 		{
 			_hBitmap = (HBITMAP)::LoadImage(::GetModuleHandle(NULL), MAKEINTRESOURCE(_imageId), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR);
-			createBase(WC_STATIC, parentWindow, WS_CHILD|WS_VISIBLE|SS_BITMAP);
+			createBase(WC_STATIC, parentView, WS_CHILD|WS_VISIBLE|SS_BITMAP);
 			::SendMessage(_hWnd, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)_hBitmap);
 		}
 	};
